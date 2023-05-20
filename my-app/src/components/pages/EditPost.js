@@ -24,6 +24,23 @@ export default function EditPost() {
       });
   }, []);
 
+  useEffect(() => {
+    fetch(`http://localhost:5000/post/${postId}`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTitle(data.title);
+        setBody(data.body);
+        setImage(data.photo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [postId]);
+
   // Add function to handle updating the post
   const updatePost = () => {
     if (!title || !body) {
@@ -109,7 +126,7 @@ export default function EditPost() {
       </div>
       <button
         className="btn waves-effect waves-light #e57373 red lighten-2"
-        onClick={() => postDetails()}
+        onClick={() => updatePost()}
       >
         Update Post
       </button>
